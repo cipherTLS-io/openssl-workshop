@@ -54,19 +54,26 @@ if [ "$before_mod" != "$after_mod" ] || [ "$before_sum" != "$after_sum" ]; then
 fi
 
 echo "==> DCO sign-off (local commit history)"
-git log --format='%H %s%n%(trailers:key=Signed-off-by,valueonly)' > "$ci_tmp/dco.log"
-unsigned="$(awk '
-  /^[0-9a-f]{40} / {
-    if (sha != "" && !signed) print sha " " subj
-    sha = $1; subj = substr($0, 42); signed = 0; next
-  }
-  NF > 0 { signed = 1 }
-  END { if (sha != "" && !signed) print sha " " subj }
-' "$ci_tmp/dco.log")"
-if [ -n "$unsigned" ]; then
-  printf 'FAIL: commits missing Signed-off-by trailer (use git commit -s):\n%s\n' "$unsigned" >&2
-  exit 1
-fi
+python3 -B -c '
+import subprocess, sys
+out = subprocess.check_output(
+    ["git", "log", "--format=%H%x1f%s%x1f%(trailers:key=Signed-off-by,valueonly)%x1e"],
+    text=True,
+)
+missing = []
+for rec in out.split("\x1e"):
+    rec = rec.strip()
+    if not rec:
+        continue
+    sha, subj, trailers = rec.split("\x1f", 2)
+    if not trailers.strip():
+        missing.append(f"{sha[:7]} {subj}")
+if missing:
+    print("FAIL: commits missing Signed-off-by trailer (use git commit -s):", file=sys.stderr)
+    for m in missing:
+        print(" ", m, file=sys.stderr)
+    sys.exit(1)
+'
 
 echo "==> privacy scrub"
 sh hack/check.sh
