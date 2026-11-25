@@ -15,9 +15,25 @@ setup:
   - openssl x509 -req -in int.csr -CA root.pem -CAkey root.key -out int.pem -days 30 -extfile ca.ext
   - openssl req -newkey ec -pkeyopt ec_paramgen_curve:P-256 -nodes -keyout leaf.key -out leaf.csr -subj /CN=leaf.test
   - openssl x509 -req -in leaf.csr -CA int.pem -CAkey int.key -out leaf.pem -days 30
-checks:
-  - run: openssl verify -CAfile root.pem -untrusted int.pem leaf.pem
-    expect: "leaf.pem: OK"
-  - run: openssl verify -CAfile root.pem leaf.pem
-    expect_fail: true
-    why: a server that forgets to send its intermediate fails exactly like this; a check that trusts the whole chain file would hide it
+# Draft M0 schema; author validation and learner assessment are separate.
+prerequisites:
+  - Read PEM certificate subjects and issuers.
+  - Distinguish a trust anchor from an intermediate certificate.
+objective: Build the untrusted intermediate bundle required to verify the supplied leaf using only the root as the trust anchor.
+learner:
+  task: Create submission/intermediates.pem from the supplied intermediate certificate; do not add the root or leaf.
+  outputs: [submission/intermediates.pem]
+  misconception: Putting the whole chain in the trusted-root input can hide an incomplete server chain.
+reference_solution:
+  - mkdir -p submission
+  - cp int.pem submission/intermediates.pem
+assessment:
+  - rule: correctness/chain
+    inputs:
+      root: root.pem
+      intermediate: submission/intermediates.pem
+      leaf: leaf.pem
+feedback:
+  missing_submission: Create the intermediate bundle before requesting assessment.
+  invalid_chain: Check the issuer relationship and keep the trusted root separate from the intermediate input.
+transfer: Repeat with a different fixture and identify which certificates belong in each input.

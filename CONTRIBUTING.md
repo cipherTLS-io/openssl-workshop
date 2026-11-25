@@ -8,18 +8,18 @@ By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
 Lessons are files. Most contributions never touch Go.
 
 - A lesson lives in `lessons/<module>/<nn>-<slug>/lesson.yaml` and must pass `workshop lesson check`
-  on every version it declares. CI runs every lesson on every supported version on every pull request.
+  on every version it declares. This is the M0 acceptance target; the runner and lesson CI are not implemented yet.
 - Every step cites the manual page and section it relies on. A lesson with no citation is not merged.
 - A check grades an artifact (a file, a handshake, a config), never a typed string. New checks land in
-  `cryptographers-core` first; a lesson names them.
+  `ciphertls-io/core` first; a lesson names them.
 - Prose that explains is welcome; prose that grades is not. Grading is a rule in a file.
-- Issues labelled `lesson` are one command each: the best first contribution here.
+- Lesson proposals are welcome; runnable lesson contributions depend on the M0 runner.
 
 ## Where to start
 
 - **Discussions** for questions, ideas and show-and-tell.
 - **Issues** for work with a proving command. Blank issues are off; pick a template.
-- Issues labelled `good first issue` are complete, bounded and need no prior context.
+- Confirm that a labelled issue has a working proving command and satisfied prerequisites before taking it.
   `help wanted` marks work the maintainer would like a hand with.
 - Open an issue or a design document (`docs/design/`) before a large change; small fixes can go
   straight to a pull request.
@@ -29,12 +29,19 @@ Lessons are files. Most contributions never touch Go.
 One command is the commit gate for this repository and CI runs the same thing:
 
 ```
-hack/check.sh
+sh hack/ci.sh
 ```
 
-It fails on any real name, private path, employer or partner name, or money figure, so handles
-only. For Go repositories the CI workflow also runs `gofmt -l`, `go vet` and `go build`, and
-checks that every unmet phase gate in `hack/acceptance/` still exits non-zero.
+Requires Go from `go.mod` and Python 3.9 or newer (standard library only). The same command
+runs formatting enforcement, vet, Go tests/build, the privacy scrub, acceptance-dispatch tests
+and the milestone manifest. Implemented gates must pass. Declared skeletons remain PENDING;
+a green commit gate does not certify a product milestone. Manual checks remain pending until run.
+
+Use `python3 hack/acceptance.py --phase M0` to demand actual M0 acceptance; it fails while M0 is
+a skeleton. `requires` in the manifest lists host capabilities; dependencies live in PHASES.
+The dispatcher validates milestone IDs and gate paths, not the complete YAML schema or remote
+repository readiness. Check cross-repository dependency evidence at the pinned consumer revision.
+See [agent review instructions](AGENTS.md) and [setup review](docs/setup-review.md).
 
 ## Developer Certificate of Origin
 

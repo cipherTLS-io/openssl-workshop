@@ -1,19 +1,30 @@
 # openssl-workshop
 
+Program priority (2026-11-12): the first delivery is the core/terminal documentation companion
+([DR-008](https://github.com/ciphertls-io/core/blob/main/docs/decisions/DR-008-companion-first.md)).
+The learning experience below remains later scope. It is not required to install or use the
+companion; its own first lesson still depends on core M0. The first companion preview belongs
+to terminal M6; this repository retains the later teaching site.
+
+
+**Availability: scaffold; no working product release is claimed.** The examples below illustrate
+planned behavior. Start with the [current quickstart](docs/user/README.md),
+[setup gaps](docs/setup-review.md) and [design](docs/DESIGN.md).
+
 Lessons generated from OpenSSL's own documentation for the version you pick, graded on the real
-artifacts you make, re-tested the night the docs change, published as a site.
+artifacts you make, planned to re-test when its cited release snapshot changes, published as a site.
 
 Title: **OpenSSL Workshop**. Maintainer: veronaimars. Apache-2.0. A workshop built as a tribute to OpenSSL,
-on OpenSSL's own documentation, at the OpenSSL project's encouragement.
+on OpenSSL's own documentation, maintained independently.
 
-## What it does
+## Intended behavior
 
 - You pick an OpenSSL release. Every lesson step cites the manual section for that release.
 - You run the real `openssl` in a sandbox and make real keys, requests, certificates and chains.
 - The grader checks the artifact you made, not the text you typed, and tells you which section
   explains the result.
-- When OpenSSL changes a page a lesson relies on, that lesson is re-run the same night and fixed
-  before you see it again.
+- The planned drift workflow detects changes between cited release snapshots, re-runs affected
+  lessons and marks their explanations for review.
 - The site shows every command with the output captured by the run that graded it.
 
 Lessons are files anyone can read and propose changes to. The model drafts and explains; the
@@ -90,7 +101,7 @@ Direction: `ROADMAP.md`. Design: `docs/DESIGN.md`. Decisions: `docs/decisions/`.
 | `hack/` | `check.sh` (scrub) and the acceptance gates |
 
 The corpus, the release images and the checks come from
-[cryptographers-core](https://github.com/veronaimars/cryptographers-core), imported as a Go module
+[ciphertls-io/core](https://github.com/ciphertls-io/core), imported as a Go module
 and pinned to a release.
 
 ## Contributing
@@ -98,7 +109,7 @@ and pinned to a release.
 See [CONTRIBUTING.md](CONTRIBUTING.md): the gate, the DCO sign-off (`git commit -s`), the commit
 grammar, and what happens after you open an issue or a pull request. Governance is in
 [GOVERNANCE.md](GOVERNANCE.md) and [MAINTAINERS.md](MAINTAINERS.md); security reports go through
-[SECURITY.md](SECURITY.md). Issues labelled `good first issue` need no prior context.
+[SECURITY.md](SECURITY.md). Check the issue prerequisites: lesson and product tasks depend on the unfinished M0 runner.
 
 ## Licence
 

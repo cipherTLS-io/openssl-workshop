@@ -1,8 +1,16 @@
 # Roadmap
 
+Program priority (2026-11-12): the first delivery is the core/terminal documentation companion
+([DR-008](https://github.com/ciphertls-io/core/blob/main/docs/decisions/DR-008-companion-first.md)).
+The learning experience below remains later scope. It is not required to install or use the
+companion; its own first lesson still depends on core M0. The first companion preview belongs
+to terminal M6; this repository retains the later teaching site.
+
+
 Grouped by minor version. What a version contains is the promise; when it ships is not. Delivery
 state lives in `docs/PHASES.md` and is proven by `hack/acceptance/phases.json`; this file never
-claims more than the ledger does.
+claims more than the ledger does. Entries without ledger rows are uncommitted direction,
+not ready work. All versions below are planned; none is a release claim.
 
 One Go binary, `workshop`. Lessons are files. The corpus, the pinned release images and the checks
 come from the core; this repository decides what to teach, generates it from the manuals, grades
