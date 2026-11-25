@@ -1,3 +1,3 @@
-module github.com/veronaimars/openssl-workshop
+module github.com/ciphertls-io/openssl-workshop
 
 go 1.23
